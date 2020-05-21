@@ -71,6 +71,7 @@ class BasicAbstractGame : public Game {
     void fill_elem(int x, int y, int dx, int dy, char elem);
     int get_obj_from_floats(float i, float j);
     int get_agent_index();
+    std::vector<int> get_mask_of_type(int type);
     std::vector<int> get_cells_with_type(int type);
 
     void check_grid_collisions(const std::shared_ptr<Entity> &src);

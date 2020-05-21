@@ -182,6 +182,17 @@ int BasicAbstractGame::get_obj(int x, int y) {
     return grid.get(x, y);
 }
 
+std::vector<int> BasicAbstractGame::get_mask_of_type(int type) {
+    std::vector<int> mask;
+
+    for (int i = 0; i < grid_size; i++) {
+        int element_present = (grid.get_index(i) == type);
+        mask.push_back(element_present);
+    }
+
+    return mask;
+}
+
 int BasicAbstractGame::to_grid_idx(int x, int y) {
     if (!grid.contains(x, y)) {
         return INVALID_IDX;
