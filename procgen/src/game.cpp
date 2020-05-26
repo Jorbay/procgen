@@ -102,8 +102,9 @@ void Game::render_to_buf_for_mask(void *dst, int w, int h, bool antialias) {
     }
 
     QRect rect = QRect(0, 0, w, h);
-    int buzzsaw_type = 2;
-    draw_mask(p, rect, buzzsaw_type);
+    //int buzzsaw_type = 2;
+    int player_type = 0;
+    draw_mask(p, rect, player_type);
 }
 
 void Game::reset() {

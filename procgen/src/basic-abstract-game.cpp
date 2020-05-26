@@ -1118,11 +1118,12 @@ bool BasicAbstractGame::has_collision(const std::shared_ptr<Entity> &e1, const s
 }
 
 void BasicAbstractGame::draw_mask(QPainter &p, const QRect &rect, int maskType) {
-    //p.fillRect(rect, QColor(255, 255, 255));
-    /*
+    //Make mask totally black to start
+    p.fillRect(rect, QColor(0, 0, 0));
+
     prepare_for_drawing(rect.height());
 
-    draw_entities(p, entities, -1);
+    draw_entities_for_mask(p, entities, -1, maskType);
 
     int low_x, high_x, low_y, high_y;
 
@@ -1159,9 +1160,11 @@ void BasicAbstractGame::draw_mask(QPainter &p, const QRect &rect, int maskType) 
         }
     }
 
-    draw_entities(p, entities, 0);
-    draw_entities(p, entities, 1);
+    draw_entities_for_mask(p, entities, 0, maskType);
+    draw_entities_for_mask(p, entities, 1, maskType);
 
+    //I believe this creates the velocity squares we saw in the old coinrun
+    /*
     if (has_useful_vel_info && (options.paint_vel_info)) {
         float infodim = rect.height() * .2;
         QRectF dst2 = QRectF(0, 0, infodim, infodim);
@@ -1173,4 +1176,24 @@ void BasicAbstractGame::draw_mask(QPainter &p, const QRect &rect, int maskType) 
         p.fillRect(dst3, QColor(s2, s2, s2));
     }
     */
+
+}
+
+void BasicAbstractGame::draw_entities_for_mask(QPainter &p, const std::vector<std::shared_ptr<Entity>> &to_draw, int render_z, int maskType) {
+
+    for (const auto &m : to_draw) {
+        if (m->render_z == render_z) {
+            draw_entity_for_mask(p, m, maskType);
+        }
+    }
+}
+
+void BasicAbstractGame::draw_entity_for_mask(QPainter &p, const std::shared_ptr<Entity> &ent, int maskType) {
+    if (should_draw_entity(ent)) {
+        if (ent->type == maskType) {
+            QRectF r1 = get_object_rect(ent);
+            float tile_ratio = get_tile_aspect_ratio(ent);
+            draw_image(p, r1, ent->rotation, ent->is_reflected, ent->image_type, ent->image_theme, ent->alpha, tile_ratio);
+        }
+    }
 }
