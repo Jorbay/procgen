@@ -100,6 +100,7 @@ class Game {
     void step();
     void reset();
     void render_to_buf(void *buf, int w, int h, bool antialias);
+    void render_to_buf_for_mask(void *buf, int w, int h, bool antialias);
     void parse_options(std::string name, VecOptions opt_vec);
 
     virtual ~Game() = 0;

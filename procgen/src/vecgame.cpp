@@ -266,6 +266,20 @@ VecGame::VecGame(int _nenvs, VecOptions opts) {
 
     {
         struct libenv_space s;
+        strcpy(s.name, "buzzsaw_mask");
+        s.type = LIBENV_SPACE_TYPE_BOX;
+        s.dtype = LIBENV_DTYPE_UINT8;
+        s.shape[0] = RES_W;
+        s.shape[1] = RES_H;
+        s.shape[2] = 3;
+        s.ndim = 3;
+        s.low.uint8 = 0;
+        s.high.uint8 = 255;
+        observation_spaces.push_back(s);
+    }
+
+    {
+        struct libenv_space s;
         strcpy(s.name, "action");
         s.type = LIBENV_SPACE_TYPE_DISCRETE;
         s.dtype = LIBENV_DTYPE_INT32;
@@ -326,6 +340,7 @@ void VecGame::reset(const std::vector<std::vector<void *>> &obs) {
         const auto &game = games[e];
         game->render_to_buf(game->render_buf, RES_W, RES_H, false);
         bgr32_to_rgb888(obs[e][0], game->render_buf, RES_W, RES_H);
+        bgr32_to_rgb888(obs[e][1], game->render_buf, RES_W, RES_H);
     }
 }
 

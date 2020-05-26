@@ -73,6 +73,8 @@ void Game::render_to_buf(void *dst, int w, int h, bool antialias) {
     // Qt focuses on RGB32 performance:
     // https://doc.qt.io/qt-5/qpainter.html#performance
     // so render to an RGB32 buffer and then convert it rather than render to RGB888 directly
+
+    //w*4 is bytes per line; I'm unsure if I can use that in any way
     QImage img((uchar *)dst, w, h, w * 4, QImage::Format_RGB32);
     QPainter p(&img);
 
@@ -83,6 +85,21 @@ void Game::render_to_buf(void *dst, int w, int h, bool antialias) {
 
     QRect rect = QRect(0, 0, w, h);
     game_draw(p, rect);
+
+    // Now, here, I want to define a method that writes to the 4th channel of dst
+    //QImage img
+    //QImage img((uchar *)dst, w, h, w * 4, QImage::Format_RGB32);
+    //mask_draw(p, rect);
+}
+
+void Game::render_to_buf_for_mask(void *dst, int w, int h, bool antialias) {
+
+    render_to_buf(dst, w, h, antialias);
+
+    // Now, here, I want to define a method that writes to the 4th channel of dst
+    //QImage img
+    //QImage img((uchar *)dst, w, h, w * 4, QImage::Format_RGB32);
+    //mask_draw(p, rect);
 }
 
 void Game::reset() {
@@ -153,6 +170,11 @@ void Game::step() {
     *done_ptr = (uint8_t)step_data.done;
     *(int32_t*)(info_bufs[0]) = (int32_t)(level_seed);
     *(int32_t*)(info_bufs[1]) = (int32_t)(step_data.level_complete);
+
+    render_to_buf_for_mask(render_buf, RES_W, RES_H, false);
+    bgr32_to_rgb888(obs_bufs[1], render_buf, RES_W, RES_H);
+    //*(int32_t*)(obs_bufs[1]) = (int32_t)(render_buf);
+
 }
 
 void Game::game_init() {
