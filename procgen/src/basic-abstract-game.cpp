@@ -1116,3 +1116,61 @@ bool BasicAbstractGame::has_collision(const std::shared_ptr<Entity> &e1, const s
 
     return (fabs(e1->x - e2->x) < threshold_x) && (fabs(e1->y - e2->y) < threshold_y);
 }
+
+void BasicAbstractGame::draw_mask(QPainter &p, const QRect &rect, int maskType) {
+    //p.fillRect(rect, QColor(255, 255, 255));
+    /*
+    prepare_for_drawing(rect.height());
+
+    draw_entities(p, entities, -1);
+
+    int low_x, high_x, low_y, high_y;
+
+    if (options.center_agent) {
+        float margin = (visibility / 2.0 + 1);
+        low_x = center_x - margin;
+        high_x = center_x + margin;
+        low_y = center_y - margin;
+        high_y = center_y + margin;
+    } else {
+        low_x = 0;
+        high_x = main_width - 1;
+        low_y = 0;
+        high_y = main_height - 1;
+    }
+
+    for (int x = low_x; x <= high_x; x++) {
+        for (int y = low_y; y <= high_y; y++) {
+            int type = get_obj(x, y);
+
+            if (type == INVALID_OBJ) {
+                continue;
+            }
+
+            if (type != maskType) {
+                continue;
+            }
+
+            int theme = theme_for_grid_obj(type);
+
+            QRectF r2 = get_screen_rect(x, y + 1, 1, 1, RENDER_EPS);
+
+            draw_image(p, r2, 0, false, type, theme, 1.0, 0.0);
+        }
+    }
+
+    draw_entities(p, entities, 0);
+    draw_entities(p, entities, 1);
+
+    if (has_useful_vel_info && (options.paint_vel_info)) {
+        float infodim = rect.height() * .2;
+        QRectF dst2 = QRectF(0, 0, infodim, infodim);
+        int s1 = to_shade(.5 * agent->vx / maxspeed + .5);
+        int s2 = to_shade(.5 * agent->vy / max_jump + .5);
+        p.fillRect(dst2, QColor(s1, s1, s1));
+
+        QRectF dst3 = QRectF(infodim, 0, infodim, infodim);
+        p.fillRect(dst3, QColor(s2, s2, s2));
+    }
+    */
+}

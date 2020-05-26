@@ -108,6 +108,7 @@ class Game {
     virtual void game_reset() = 0;
     virtual void game_step() = 0;
     virtual void game_draw(QPainter &p, const QRect &rect) = 0;
+    virtual void draw_mask(QPainter &p, const QRect &rect, int maskType) = 0;
 
   private:
     int reset_count = 0;

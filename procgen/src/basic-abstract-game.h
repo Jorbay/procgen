@@ -23,6 +23,7 @@ class BasicAbstractGame : public Game {
     void game_step() override;
     void game_reset() override;
     void game_draw(QPainter &p, const QRect &rect) override;
+    void draw_mask(QPainter &p, const QRect &rect, int maskType) override;
     void game_init() override;
 
     virtual bool is_blocked(const std::shared_ptr<Entity> &src, int target, bool is_horizontal);

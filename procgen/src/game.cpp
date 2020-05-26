@@ -85,21 +85,25 @@ void Game::render_to_buf(void *dst, int w, int h, bool antialias) {
 
     QRect rect = QRect(0, 0, w, h);
     game_draw(p, rect);
-
-    // Now, here, I want to define a method that writes to the 4th channel of dst
-    //QImage img
-    //QImage img((uchar *)dst, w, h, w * 4, QImage::Format_RGB32);
-    //mask_draw(p, rect);
 }
 
 void Game::render_to_buf_for_mask(void *dst, int w, int h, bool antialias) {
+    // Qt focuses on RGB32 performance:
+    // https://doc.qt.io/qt-5/qpainter.html#performance
+    // so render to an RGB32 buffer and then convert it rather than render to RGB888 directly
 
-    render_to_buf(dst, w, h, antialias);
+    //w*4 is bytes per line; I'm unsure if I can use that in any way
+    QImage img((uchar *)dst, w, h, w * 4, QImage::Format_RGB32);
+    QPainter p(&img);
 
-    // Now, here, I want to define a method that writes to the 4th channel of dst
-    //QImage img
-    //QImage img((uchar *)dst, w, h, w * 4, QImage::Format_RGB32);
-    //mask_draw(p, rect);
+    if (antialias) {
+        p.setRenderHint(QPainter::Antialiasing, true);
+        p.setRenderHint(QPainter::SmoothPixmapTransform, true);
+    }
+
+    QRect rect = QRect(0, 0, w, h);
+    int buzzsaw_type = 2;
+    draw_mask(p, rect, buzzsaw_type);
 }
 
 void Game::reset() {

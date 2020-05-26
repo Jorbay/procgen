@@ -340,6 +340,9 @@ void VecGame::reset(const std::vector<std::vector<void *>> &obs) {
         const auto &game = games[e];
         game->render_to_buf(game->render_buf, RES_W, RES_H, false);
         bgr32_to_rgb888(obs[e][0], game->render_buf, RES_W, RES_H);
+
+        //The following is added to generate the initial mask
+        game->render_to_buf_for_mask(game->render_buf, RES_W, RES_H, false);
         bgr32_to_rgb888(obs[e][1], game->render_buf, RES_W, RES_H);
     }
 }
