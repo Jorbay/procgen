@@ -23,7 +23,7 @@ class BasicAbstractGame : public Game {
     void game_step() override;
     void game_reset() override;
     void game_draw(QPainter &p, const QRect &rect) override;
-    void draw_mask(QPainter &p, const QRect &rect, int maskType) override;
+    void draw_mask(QPainter &p, const QRect &rect, std::vector<int> mask_types) override;
     void game_init() override;
 
     virtual bool is_blocked(const std::shared_ptr<Entity> &src, int target, bool is_horizontal);
@@ -159,9 +159,9 @@ class BasicAbstractGame : public Game {
     void prepare_for_drawing(float rect_height);
     void draw_background(QPainter &p, const QRect &rect);
     void draw_entity(QPainter &p, const std::shared_ptr<Entity> &to_draw);
-    void draw_entity_for_mask(QPainter &p, const std::shared_ptr<Entity> &to_draw, int maskType);
+    void draw_entity_for_mask(QPainter &p, const std::shared_ptr<Entity> &to_draw, std::vector<int> mask_types);
     void draw_entities(QPainter &p, const std::vector<std::shared_ptr<Entity>> &to_draw, int render_z = 0);
-    void draw_entities_for_mask(QPainter &p, const std::vector<std::shared_ptr<Entity>> &to_draw, int render_z = 0, int maskType = 0);
+    void draw_entities_for_mask(QPainter &p, const std::vector<std::shared_ptr<Entity>> &to_draw, int render_z = 0, std::vector<int> mask_types = std::vector<int>(3));
     void draw_image(QPainter &p, QRectF &rect, float rotation, bool is_reflected, int img_idx, int theme, float alpha, float tile_ratio);
 
     bool sub_step(const std::shared_ptr<Entity> &obj, float _vx, float _vy, int depth);

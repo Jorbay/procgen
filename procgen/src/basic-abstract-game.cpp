@@ -1117,13 +1117,13 @@ bool BasicAbstractGame::has_collision(const std::shared_ptr<Entity> &e1, const s
     return (fabs(e1->x - e2->x) < threshold_x) && (fabs(e1->y - e2->y) < threshold_y);
 }
 
-void BasicAbstractGame::draw_mask(QPainter &p, const QRect &rect, int maskType) {
+void BasicAbstractGame::draw_mask(QPainter &p, const QRect &rect, std::vector<int> mask_types) {
     //Make mask totally black to start
     p.fillRect(rect, QColor(0, 0, 0));
 
     prepare_for_drawing(rect.height());
 
-    draw_entities_for_mask(p, entities, -1, maskType);
+    draw_entities_for_mask(p, entities, -1, mask_types);
 
     int low_x, high_x, low_y, high_y;
 
@@ -1148,7 +1148,8 @@ void BasicAbstractGame::draw_mask(QPainter &p, const QRect &rect, int maskType) 
                 continue;
             }
 
-            if (type != maskType) {
+            //if type is not among mask_types, then continue
+            if (!std::count(mask_types.begin(), mask_types.end(), type)) {
                 continue;
             }
 
@@ -1160,8 +1161,8 @@ void BasicAbstractGame::draw_mask(QPainter &p, const QRect &rect, int maskType) 
         }
     }
 
-    draw_entities_for_mask(p, entities, 0, maskType);
-    draw_entities_for_mask(p, entities, 1, maskType);
+    draw_entities_for_mask(p, entities, 0, mask_types);
+    draw_entities_for_mask(p, entities, 1, mask_types);
 
     //I believe this creates the velocity squares we saw in the old coinrun
     /*
@@ -1179,18 +1180,19 @@ void BasicAbstractGame::draw_mask(QPainter &p, const QRect &rect, int maskType) 
 
 }
 
-void BasicAbstractGame::draw_entities_for_mask(QPainter &p, const std::vector<std::shared_ptr<Entity>> &to_draw, int render_z, int maskType) {
+void BasicAbstractGame::draw_entities_for_mask(QPainter &p, const std::vector<std::shared_ptr<Entity>> &to_draw, int render_z, std::vector<int> mask_types) {
 
     for (const auto &m : to_draw) {
         if (m->render_z == render_z) {
-            draw_entity_for_mask(p, m, maskType);
+            draw_entity_for_mask(p, m, mask_types);
         }
     }
 }
 
-void BasicAbstractGame::draw_entity_for_mask(QPainter &p, const std::shared_ptr<Entity> &ent, int maskType) {
+void BasicAbstractGame::draw_entity_for_mask(QPainter &p, const std::shared_ptr<Entity> &ent, std::vector<int> mask_types) {
     if (should_draw_entity(ent)) {
-        if (ent->type == maskType) {
+        //draw_image if type is in mask_types
+        if (std::count(mask_types.begin(), mask_types.end(), ent->type)) {
             QRectF r1 = get_object_rect(ent);
             float tile_ratio = get_tile_aspect_ratio(ent);
             draw_image(p, r1, ent->rotation, ent->is_reflected, ent->image_type, ent->image_theme, ent->alpha, tile_ratio);

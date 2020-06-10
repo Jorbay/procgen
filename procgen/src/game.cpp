@@ -102,9 +102,26 @@ void Game::render_to_buf_for_mask(void *dst, int w, int h, bool antialias) {
     }
 
     QRect rect = QRect(0, 0, w, h);
-    //int buzzsaw_type = 2;
-    int player_type = 0;
-    draw_mask(p, rect, player_type);
+
+    std::vector<int> types_for_mask;
+    types_for_mask.push_back(0); // player type
+    types_for_mask.push_back(1); //goal type; seems to be the coin
+    types_for_mask.push_back(2); //buzzsaw1 type
+    types_for_mask.push_back(3); //buzzsaw2 type
+    types_for_mask.push_back(5); //enemy1 type
+    types_for_mask.push_back(6); //enemy2 type
+    types_for_mask.push_back(7); //enemy3 type
+    types_for_mask.push_back(9); //player jump type
+    types_for_mask.push_back(12); //player right type
+    types_for_mask.push_back(13); //player left type
+    types_for_mask.push_back(15); //wall middle type; I could consider it useless for mask needs, but I won't for now
+    types_for_mask.push_back(16); //wall top type
+    types_for_mask.push_back(17); //lava mid type
+    types_for_mask.push_back(18); //lava top type
+    //types_for_mask.push_back(19); //enemy barrier type; looks like it doesn't have an asset from kenney
+    types_for_mask.push_back(20); //crate type
+    //types_for_mask.push_back(51); //wall type; unused in coinrun
+    draw_mask(p, rect, types_for_mask);
 }
 
 void Game::reset() {
